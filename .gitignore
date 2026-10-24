@@ -1,0 +1,7 @@
+﻿*.gpkg
+datos/*.geojson
+!datos/hospitales_boyaca.geojson
+.env
+venv/
+__pycache__/
+node_modules/
