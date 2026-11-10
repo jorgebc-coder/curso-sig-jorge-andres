@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veredas de Boyacá</title>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <style>
+    html, body, #mapa {
+      height: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="mapa"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const mapa = L.map("mapa").setView([5.54, -73.36], 8);
+
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(mapa);
+
+    const url =
+      "https://services6.arcgis.com/Ex2fmFOuTOHRZtML/ArcGIS/rest/services/" +
+      "Veredas_Boyaca_2024/FeatureServer/0/query";
+
+    async function cargarVeredas() {
+      try {
+        let offset = 0;
+        let todasLasVeredas = [];
+        const cantidad = 1000;
+
+        while (true) {
+          const parametros = new URLSearchParams({
+            where: "1=1",
+            outFields: "NOMBRE_VER,NOMB_MPIO",
+            outSR: "4326",
+            f: "geojson",
+            resultRecordCount: String(cantidad),
+            resultOffset: String(offset)
+          });
+
+          const respuesta = await fetch(url + "?" + parametros);
+
+          if (!respuesta.ok) {
+            throw new Error("Error al consultar el servicio");
+          }
+
+          const geo = await respuesta.json();
+
+          if (geo.error) {
+            throw new Error(geo.error.message);
+          }
+
+          const registros = geo.features || [];
+          todasLasVeredas.push(...registros);
+
+          if (registros.length < cantidad) break;
+
+          offset += registros.length;
+        }
+
+        const capaVeredas = L.geoJSON({
+          type: "FeatureCollection",
+          features: todasLasVeredas
+        }, {
+          style: {
+            color: "#7B3294",
+            weight: 1,
+            fillColor: "#C2A5CF",
+            fillOpacity: 0.45
+          },
+
+          onEachFeature: (feature, layer) => {
+            layer.bindPopup(
+              `<b>Vereda:</b> ${feature.properties.NOMBRE_VER || "Sin nombre"}<br>
+               <b>Municipio:</b> ${feature.properties.NOMB_MPIO || "Sin dato"}`
+            );
+          }
+        }).addTo(mapa);
+
+        if (capaVeredas.getBounds().isValid()) {
+          mapa.fitBounds(capaVeredas.getBounds());
+        }
+
+        console.log("Veredas cargadas:", todasLasVeredas.length);
+
+      } catch (error) {
+        console.error("Error:", error);
+        alert("No fue posible cargar las veredas. Revisa la consola.");
+      }
+    }
+
+    cargarVeredas();
+  </script>
+</body>
+</html>
+
