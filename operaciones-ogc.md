@@ -34,3 +34,6 @@ https://geoportal.dane.gov.co/mparcgis/services/MGN2024/Serv_CapasMGN_2024/MapSe
 **Filtro aplicado:** BBOX (filtro espacial).
 
 **Conteo de features:** 7 entidades, verificadas mediante Python utilizando la función `len()` sobre la colección `features`.
+**Evidencia:**
+
+![Consulta WFS y conteo de 7 features](captura-wfs.png)
