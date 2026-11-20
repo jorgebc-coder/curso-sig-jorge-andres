@@ -50,3 +50,6 @@ https://a.tile.openstreetmap.fr/hot/7/38/62.png
 - Fila (y): 62
 
 La consulta devuelve una imagen cartográfica correspondiente a una zona de Colombia.
+**Evidencia:**
+
+![Tesela de OpenStreetMap](captura-tesela.png) 
