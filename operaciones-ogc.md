@@ -37,3 +37,16 @@ https://geoportal.dane.gov.co/mparcgis/services/MGN2024/Serv_CapasMGN_2024/MapSe
 **Evidencia:**
 
 ![Consulta WFS y conteo de 7 features](captura-wfs.png)
+## 4. WMTS / Teselas
+
+Se consultó una tesela cartográfica de OpenStreetMap mediante el esquema XYZ, utilizando una URL con los parámetros de nivel de zoom, columna y fila.
+
+**URL de la tesela:**
+
+https://a.tile.openstreetmap.fr/hot/7/38/62.png
+
+- Nivel de zoom (z): 7
+- Columna (x): 38
+- Fila (y): 62
+
+La consulta devuelve una imagen cartográfica correspondiente a una zona de Colombia.
